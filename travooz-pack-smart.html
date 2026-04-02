@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta name="description" content="TRAVOOZ Pack Smart – Get your custom packing checklist and discover gear you'll actually use." />
+<title>TRAVOOZ Pack Smart – Pack Smarter for Every Trip</title>
+
+<!-- ============================================================
+  TRAVOOZ Pack Smart
+  Replace the constants below in CONFIG before going live.
+  ============================================================ -->
+
+<style>
+  /* ── Google Fonts ── */
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+  /* ── Design Tokens ── */
+  :root {
+    --cream: #FAF6F1;
+    --warm-white: #FFFCF8;
+    --sand: #EDE5D8;
+    --sand-mid: #D8CCBA;
+    --bark: #8B6F4E;
+    --bark-dark: #6A5239;
+    --ink: #1A1612;
+    --ink-soft: #4A3F35;
+    --ink-muted: #7A6E65;
+    --accent: #D4622A;
+    --accent-light: #F0A87A;
+    --accent-pale: #FAE8DC;
+    --green: #4A7C59;
+    --green-pale: #E3EFE7;
+    --card-bg: #FFFFFF;
+    --border: #EDE5D8;
+    --shadow: 0 2px 20px rgba(26,22,18,0.07);
+    --shadow-md: 0 6px 32px rgba(26,22,18,0.11);
+    --shadow-lg: 0 12px 48px rgba(26,22,18,0.14);
+    --radius: 18px;
+    --radius-sm: 10px;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --transition: 0.22s ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Utility ── */
+  .hidden { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+  img { max-width: 100%; display: block; }
+  button { cursor: pointer; font-family: var(--font-body); border: none; background: none; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Layout ── */
+  .container { max-width: 480px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .header-wrap {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+  }
+  .logo span { color: var(--accent); }
+
+  .header-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-pale);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    padding: 48px 20px 40px;
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--bark);
+    margin-bottom: 16px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--bark);
+    opacity: 0.5;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 9vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 340px;
+    margin: 0 auto 28px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 15px 36px;
+    border-radius: 50px;
+    box-shadow: 0 4px 18px rgba(212,98,42,0.35);
+    transition: transform var(--transition), box-shadow var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-primary:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(212,98,42,0.25); }
+
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .trust-pill {
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .trust-pill svg { flex-shrink: 0; }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  .section-sub {
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    margin-bottom: 22px;
+  }
+
+  /* ── TRIP FORM ── */
+  #quiz-section {
+    padding-top: 8px;
+  }
+
+  .progress-bar {
+    background: var(--sand);
+    border-radius: 8px;
+    height: 5px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 8px;
+    transition: width 0.4s ease;
+  }
+
+  .quiz-step { animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .step-question {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 12px;
+    text-align: left;
+    transition: border-color var(--transition), background var(--transition), transform var(--transition);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .option-btn .opt-icon { font-size: 20px; flex-shrink: 0; }
+  .option-btn .opt-label { font-size: 13.5px; font-weight: 500; color: var(--ink-soft); line-height: 1.3; }
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-pale);
+  }
+  .option-btn.selected .opt-label { color: var(--accent); font-weight: 600; }
+  .option-btn:active { transform: scale(0.97); }
+
+  .btn-next {
+    margin-top: 22px;
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 15px;
+    border-radius: 50px;
+    transition: background var(--transition), transform var(--transition);
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .btn-next.ready { opacity: 1; pointer-events: auto; }
+  .btn-next:active { transform: scale(0.98); background: var(--ink-soft); }
+
+  /* ── CHECKLIST ── */
+  #results-section { padding-top: 8px; }
+
+  .trip-summary-bar {
+    background: var(--sand);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .trip-pill {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    border: 1px solid var(--border);
+  }
+
+  .checklist-category { margin-bottom: 22px; }
+  .cat-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--bark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cat-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    border: 1.5px solid var(--border);
+    transition: border-color var(--transition), background var(--transition);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .checklist-item.checked {
+    border-color: var(--green);
+    background: var(--green-pale);
+  }
+  .checklist-item.checked .item-label {
+    color: var(--green);
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  .item-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--sand-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .checklist-item.checked .item-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .item-check svg { display: none; }
+  .checklist-item.checked .item-check svg { display: block; }
+  .item-label { font-size: 14px; font-weight: 400; color: var(--ink-soft); flex: 1; }
+
+  .add-item-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .add-item-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--card-bg);
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .add-item-input:focus { border-color: var(--accent); }
+  .btn-add {
+    background: var(--accent-pale);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 16px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+    white-space: nowrap;
+  }
+  .btn-add:active { background: var(--accent-light); }
+
+  .checklist-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .btn-ghost {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    background: var(--card-bg);
+    text-align: center;
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .btn-ghost:active { background: var(--sand); }
+  .btn-continue {
+    flex: 2;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 50px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: background var(--transition);
+  }
+  .btn-continue:active { background: var(--ink-soft); }
+
+  /* ── PRODUCT CARDS ── */
+  #products-section { background: var(--warm-white); padding: 32px 20px 40px; margin-bottom: 0; }
+  #products-section .section-title { font-size: 24px; }
+
+  .products-own {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .product-img-wrap {
+    position: relative;
+    background: linear-gradient(135deg, var(--sand) 0%, var(--accent-pale) 100%);
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .product-emoji {
+    font-size: 72px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12));
+  }
+
+  .own-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .product-body { padding: 16px; }
+  .product-name {
+    font-family: var(--font-display);
+    font-size: 19px;
+    margin-bottom: 5px;
+    letter-spacing: -0.2px;
+  }
+  .product-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.55; margin-bottom: 14px; }
+
+  .product-cta-row {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-wa {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #25D366;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 12px;
+    border-radius: 50px;
+    transition: opacity var(--transition), transform var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-wa:active { opacity: 0.88; transform: scale(0.97); }
+
+  .btn-ig {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 16px;
+    border-radius: 50px;
+    transition: opacity var(--transition), transform var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-ig:active { opacity: 0.88; transform: scale(0.97); }
+
+  /* Affiliate */
+  .affiliate-section { margin-top: 4px; }
+  .affiliate-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .affiliate-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .affiliate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .affiliate-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color var(--transition);
+  }
+  .affiliate-card:active { border-color: var(--sand-mid); }
+  .aff-emoji { font-size: 28px; }
+  .aff-name { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+  .aff-sub { font-size: 11.5px; color: var(--ink-muted); line-height: 1.4; }
+  .btn-aff {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+
+  .affiliate-disclosure {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 14px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ── BLOG ── */
+  #blog-section { padding: 32px 20px 100px; max-width: 480px; margin: 0 auto; }
+
+  .blog-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .blog-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .blog-card:active { border-color: var(--sand-mid); }
+
+  .blog-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--bark);
+    margin-bottom: 6px;
+  }
+  .blog-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .blog-excerpt { font-size: 13px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 12px; }
+  .blog-card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .btn-read {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,18,0.55);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .modal-sheet {
+    background: var(--warm-white);
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px 20px 40px;
+    transform: translateY(40px);
+    transition: transform 0.3s ease;
+  }
+  .modal-overlay.open .modal-sheet { transform: translateY(0); }
+
+  .modal-drag { width: 40px; height: 4px; background: var(--sand-mid); border-radius: 2px; margin: 0 auto 18px; }
+  .modal-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 10px; }
+  .modal-body { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+
+  /* ── STICKY BOTTOM BAR ── */
+  .sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 150;
+    padding: 12px 20px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: rgba(255,252,248,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+  }
+  .sticky-bar.visible { transform: translateY(0); }
+
+  .sticky-bar-text { font-size: 13px; color: var(--ink-soft); align-self: center; flex: 1; line-height: 1.4; }
+  .sticky-bar-text strong { display: block; font-size: 14px; color: var(--ink); }
+  .btn-sticky-wa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 50px;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(212,98,42,0.35);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--transition);
+  }
+  .btn-sticky-wa:active { transform: scale(0.97); }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--border);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .site-footer a { color: var(--accent); font-weight: 500; }
+
+  /* ── Scroll hint decorations ── */
+  .divider {
+    max-width: 480px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Animations */
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  .pop { animation: pop 0.25s ease; }
+
+  /* ── SHOP SECTION ── */
+  #shop-section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+  }
+
+  .shop-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .shop-sub { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px; }
+
+  /* Filter tabs */
+  .shop-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .shop-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 50px;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--ink-soft);
+    transition: border-color var(--transition), background var(--transition), color var(--transition);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+  .tab-btn:active { opacity: 0.85; }
+
+  /* Shop grid — own products (full width cards) */
+  .shop-own-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Shop grid — affiliate (2 col) */
+  .shop-aff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .shop-divider-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .shop-divider-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .shop-disclosure {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-style: italic;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  /* Compact own product card for shop (slightly smaller than quiz result cards) */
+  .shop-product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    gap: 0;
+    transition: box-shadow var(--transition);
+  }
+  .shop-product-card:active { box-shadow: var(--shadow-md); }
+
+  .shop-product-img {
+    width: 110px;
+    flex-shrink: 0;
+    background: linear-gradient(145deg, var(--sand) 0%, var(--accent-pale) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    position: relative;
+  }
+
+  .shop-own-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 20px;
+  }
+
+  .shop-product-body {
+    flex: 1;
+    padding: 14px 14px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .shop-product-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    line-height: 1.25;
+    letter-spacing: -0.2px;
+  }
+
+  .shop-product-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .shop-cta-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .btn-shop-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #25D366;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 50px;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity var(--transition);
+  }
+  .btn-shop-wa:active { opacity: 0.85; }
+
+  .btn-shop-ig {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #F58529, #DD2A7B, #8134AF);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 50px;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity var(--transition);
+  }
+  .btn-shop-ig:active { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  CONFIG — Replace these values before going live
+  ============================================================ -->
+<script>
+const CONFIG = {
+  // Your WhatsApp number with country code, no + or spaces
+  WHATSAPP_NUMBER: "919999999999",
+
+  // Your Instagram profile URL
+  INSTAGRAM_URL: "https://www.instagram.com/travooz",
+
+  // Affiliate product links (replace with real affiliate URLs)
+  AFFILIATE_LINKS: {
+    travel_bottle:    "https://amzn.to/REPLACE_BOTTLE",
+    power_bank:       "https://amzn.to/REPLACE_POWERBANK",
+    mini_lock:        "https://amzn.to/REPLACE_LOCK",
+    neck_pillow:      "https://amzn.to/REPLACE_PILLOW",
+    passport_holder:  "https://amzn.to/REPLACE_PASSPORT",
+    toiletry_set:     "https://amzn.to/REPLACE_TOILETRY",
+  },
+
+  // Product names for WhatsApp prefill
+  PRODUCTS: {
+    organiser: "Travooz Travel Organiser",
+    waist_bag: "Travooz Waist Bag",
+    tyre_valve: "Travooz Glow Tyre Valves",
+    keychain:  "Travooz Keychain",
+  }
+};
+
+// Utility: build WhatsApp link
+function waLink(productName) {
+  const msg = encodeURIComponent(`Hi! I want to order the ${productName} 🎒`);
+  return `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${msg}`;
+}
+</script>
+
+<!-- ── HEADER ── -->
+<div class="header-wrap" role="banner">
+  <header class="site-header">
+    <div class="logo">TRAVO<span>OZ</span></div>
+    <span class="header-badge">Pack Smart</span>
+  </header>
+</div>
+
+<!-- == SECTION 1: HERO == -->
+<section id="hero" aria-label="Welcome">
+  <p class="hero-eyebrow">Your personal packing guide</p>
+  <h1 class="hero-title">Pack smarter for <em>every</em> trip.</h1>
+  <p class="hero-sub">Answer 4 quick questions and get a custom checklist — plus gear you'll actually use.</p>
+
+  <button
+    class="btn-primary"
+    onclick="startQuiz()"
+    data-track="quiz-start"
+    aria-label="Start building your packing checklist"
+  >
+    Start Packing ✦
+  </button>
+
+  <div class="hero-trust">
+    <span class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 4H13l-3.6 2.6 1.4 4.3L7 9.3l-3.8 2.6 1.4-4.3L1 5h4.5L7 1z" fill="#D4622A"/></svg>
+      Built for real trips
+    </span>
+    <span class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#D4622A" stroke-width="1.5"/><path d="M4.5 7l1.8 1.8 3-3.6" stroke="#D4622A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Takes 30 seconds
+    </span>
+    <span class="trust-pill">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="12" height="8" rx="2" stroke="#D4622A" stroke-width="1.5"/><path d="M4.5 4V3a2.5 2.5 0 015 0v1" stroke="#D4622A" stroke-width="1.5" stroke-linecap="round"/></svg>
+      No sign-up needed
+    </span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- == SHOP SECTION == -->
+<section id="shop-section" aria-label="Shop Travooz Products">
+  <div class="shop-header">
+    <h2 class="section-title">Shop 🛍️</h2>
+  </div>
+  <p class="shop-sub">Browse our travel gear — tap to order directly.</p>
+
+  <div class="shop-tabs" role="tablist" aria-label="Filter products">
+    <button class="tab-btn active" onclick="filterShop('all', this)" role="tab" aria-selected="true">All</button>
+    <button class="tab-btn" onclick="filterShop('own', this)" role="tab" aria-selected="false">Travooz Originals</button>
+    <button class="tab-btn" onclick="filterShop('affiliate', this)" role="tab" aria-selected="false">Travel Finds</button>
+  </div>
+
+  <div id="shop-own" class="shop-own-grid"></div>
+
+  <div id="shop-aff-wrap">
+    <div class="shop-divider-label">Recommended travel finds</div>
+    <div class="shop-aff-grid" id="shop-aff"></div>
+    <p class="shop-disclosure">Some links may earn us a small commission.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- == SECTION 2: QUIZ == -->
+<section id="quiz-section" class="section hidden" aria-label="Trip Setup">
+  <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="progress-bar-wrap">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div id="quiz-container"></div>
+</section>
+
+<!-- == SECTION 3: CHECKLIST == -->
+<section id="results-section" class="section hidden" aria-label="Your Packing Checklist">
+  <h2 class="section-title">Your checklist ✓</h2>
+  <p class="section-sub">Tap items to check them off. Add anything you need.</p>
+
+  <div class="trip-summary-bar" id="trip-summary" role="status" aria-label="Trip summary"></div>
+
+  <div id="checklist-container"></div>
+
+  <div class="add-item-row" aria-label="Add custom item">
+    <input
+      type="text"
+      class="add-item-input"
+      id="custom-item-input"
+      placeholder="Add something…"
+      maxlength="50"
+      aria-label="Custom item name"
+    />
+    <button class="btn-add" onclick="addCustomItem()" aria-label="Add item">+ Add</button>
+  </div>
+
+  <div class="checklist-actions">
+    <button class="btn-ghost" onclick="resetChecklist()" data-track="checklist-reset">Reset</button>
+    <button class="btn-continue" onclick="showProducts()" data-track="checklist-complete">
+      See recommended gear →
+    </button>
+  </div>
+</section>
+
+<!-- == SECTION 4: PRODUCTS == -->
+<section id="products-section" class="hidden" aria-label="Recommended Gear">
+  <div style="max-width:480px;margin:0 auto;">
+    <h2 class="section-title">Made for this trip 🎒</h2>
+    <p class="section-sub">Travooz picks based on your answers.</p>
+
+    <div class="products-own" id="own-products-container"></div>
+
+    <div class="affiliate-section">
+      <div class="affiliate-label">Recommended travel finds</div>
+      <div class="affiliate-grid" id="affiliate-products-container"></div>
+      <p class="affiliate-disclosure">Some links may earn us a small commission.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" style="margin-top:32px;">
+
+<!-- == SECTION 5: BLOG == -->
+<section id="blog-section" aria-label="Travel Tips">
+  <h2 class="section-title">Quick Travel Tips</h2>
+  <p class="section-sub">Short reads from real travelers.</p>
+
+  <div class="blog-grid" id="blog-container"></div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer" role="contentinfo">
+  <p>© 2025 TRAVOOZ &nbsp;·&nbsp; <a href="https://www.instagram.com/travooz" target="_blank" rel="noopener">@travooz</a></p>
+</footer>
+
+<!-- ── STICKY BOTTOM BAR ── -->
+<div class="sticky-bar" id="sticky-bar" role="complementary" aria-label="Order on WhatsApp">
+  <div class="sticky-bar-text">
+    <strong>Love what you see?</strong>
+    Message us to get your travel setup.
+  </div>
+  <a
+    href="#"
+    id="sticky-wa-btn"
+    class="btn-sticky-wa"
+    target="_blank"
+    rel="noopener"
+    data-track="whatsapp-click-sticky"
+    aria-label="Message us on WhatsApp"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.105.55 4.082 1.516 5.794L.059 23.938l6.292-1.639A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.359-.215-3.734.973.998-3.645-.234-.374A9.818 9.818 0 1112 21.818z"/></svg>
+    Order on WhatsApp
+  </a>
+</div>
+
+<!-- ── BLOG MODAL ── -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-drag"></div>
+    <div style="position:relative;">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      <h3 class="modal-title" id="modal-title"></h3>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+  APP LOGIC
+  ============================================================ -->
+<script>
+
+/* ── STATE ── */
+const state = {
+  step: 0,
+  answers: { type: null, duration: null, weather: null, need: null },
+  checklistItems: [],
+};
+
+const QUESTIONS = [
+  {
+    key: 'type',
+    label: 'Step 1 of 4',
+    question: "What kind of trip is this?",
+    options: [
+      { value: 'weekend',  icon: '🏖️', label: 'Weekend getaway' },
+      { value: 'business', icon: '💼', label: 'Business trip' },
+      { value: 'vacation', icon: '✈️', label: 'Vacation' },
+      { value: 'roadtrip', icon: '🚗', label: 'Road trip' },
+    ]
+  },
+  {
+    key: 'duration',
+    label: 'Step 2 of 4',
+    question: "How long will you be away?",
+    options: [
+      { value: 'short',  icon: '⚡', label: '1 – 3 days' },
+      { value: 'medium', icon: '📅', label: '4 – 7 days' },
+      { value: 'long',   icon: '🗺️', label: '8+ days' },
+    ]
+  },
+  {
+    key: 'weather',
+    label: 'Step 3 of 4',
+    question: "What's the weather like there?",
+    options: [
+      { value: 'hot',   icon: '☀️', label: 'Hot' },
+      { value: 'mixed', icon: '⛅', label: 'Mixed' },
+      { value: 'cold',  icon: '❄️', label: 'Cold' },
+      { value: 'rainy', icon: '🌧️', label: 'Rainy' },
+    ]
+  },
+  {
+    key: 'need',
+    label: 'Step 4 of 4',
+    question: "What matters most to you?",
+    options: [
+      { value: 'organised', icon: '📦', label: 'Organised packing' },
+      { value: 'access',    icon: '🎒', label: 'Easy access on the go' },
+      { value: 'compact',   icon: '🧳', label: 'Compact travel' },
+      { value: 'gifting',   icon: '🎁', label: 'Gifting / small extras' },
+    ]
+  }
+];
+
+/* ── SHOP ── */
+const ALL_OWN_PRODUCTS = [
+  {
+    id: 'organiser',
+    name: 'Travooz Travel Organiser',
+    emoji: '🗃️',
+    desc: 'Multiple compartments, removable design. Unpack in 30 seconds flat.',
+  },
+  {
+    id: 'waist_bag',
+    name: 'Travooz Waist Bag',
+    emoji: '👜',
+    desc: 'Hands-free carry for city walks, markets, and transit days.',
+  },
+  {
+    id: 'tyre_valve',
+    name: 'Glow-in-Dark Tyre Valves',
+    emoji: '✨',
+    desc: 'A small upgrade that turns heads on every road trip.',
+  },
+  {
+    id: 'keychain',
+    name: 'Travooz Keychain',
+    emoji: '🔑',
+    desc: 'The traveller\'s little keepsake. Great gift, great add-on.',
+  },
+];
+
+const ALL_AFFILIATE_PRODUCTS = [
+  { id: 'power_bank',      emoji: '🔋', name: 'Slim Power Bank',            sub: 'Never run out mid-trip.' },
+  { id: 'mini_lock',       emoji: '🔒', name: 'TSA Mini Lock',              sub: 'Lightweight bag security.' },
+  { id: 'travel_bottle',   emoji: '💧', name: 'Leak-Proof Travel Bottle',   sub: 'Stay hydrated, mess-free.' },
+  { id: 'neck_pillow',     emoji: '🛩️', name: 'Memory Foam Neck Pillow',    sub: 'Arrive rested. Always.' },
+  { id: 'passport_holder', emoji: '📘', name: 'RFID Passport Holder',       sub: 'Safe, slim, and smart.' },
+  { id: 'toiletry_set',    emoji: '🧴', name: 'Travel Toiletry Bottle Set', sub: 'Refillable, TSA-approved.' },
+];
+
+function renderShop() {
+  // Own products
+  const ownEl = document.getElementById('shop-own');
+  ownEl.innerHTML = ALL_OWN_PRODUCTS.map(p => `
+    <div class="shop-product-card" data-product="${p.id}">
+      <div class="shop-product-img">
+        <span aria-hidden="true">${p.emoji}</span>
+        <span class="shop-own-badge">Travooz</span>
+      </div>
+      <div class="shop-product-body">
+        <div>
+          <div class="shop-product-name">${p.name}</div>
+          <div class="shop-product-desc">${p.desc}</div>
+        </div>
+        <div class="shop-cta-row">
+          <a href="${waLink(CONFIG.PRODUCTS[p.id])}" class="btn-shop-wa" target="_blank" rel="noopener" data-track="whatsapp-click" data-product="${p.id}" aria-label="Order ${p.name} on WhatsApp">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.105.55 4.082 1.516 5.794L.059 23.938l6.292-1.639A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.359-.215-3.734.973.998-3.645-.234-.374A9.818 9.818 0 1112 21.818z"/></svg>
+            WhatsApp
+          </a>
+          <a href="${CONFIG.INSTAGRAM_URL}" class="btn-shop-ig" target="_blank" rel="noopener" data-track="instagram-click" data-product="${p.id}" aria-label="Order ${p.name} on Instagram">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Affiliate products
+  const affEl = document.getElementById('shop-aff');
+  affEl.innerHTML = ALL_AFFILIATE_PRODUCTS.map(p => `
+    <div class="affiliate-card">
+      <span class="aff-emoji" aria-hidden="true">${p.emoji}</span>
+      <span class="aff-name">${p.name}</span>
+      <span class="aff-sub">${p.sub}</span>
+      <a href="${CONFIG.AFFILIATE_LINKS[p.id]}" class="btn-aff" target="_blank" rel="noopener nofollow" data-track="affiliate-click" data-product="${p.id}" aria-label="Check ${p.name}">
+        Check it out →
+      </a>
+    </div>
+  `).join('');
+}
+
+function filterShop(filter, btn) {
+  // Update tab styles
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+
+  const ownEl   = document.getElementById('shop-own');
+  const affWrap = document.getElementById('shop-aff-wrap');
+
+  if (filter === 'all') {
+    ownEl.style.display   = '';
+    affWrap.style.display = '';
+  } else if (filter === 'own') {
+    ownEl.style.display   = '';
+    affWrap.style.display = 'none';
+  } else {
+    ownEl.style.display   = 'none';
+    affWrap.style.display = '';
+  }
+}
+
+/* ── QUIZ ── */
+function startQuiz() {
+  document.getElementById('hero').classList.add('hidden');
+  document.getElementById('quiz-section').classList.remove('hidden');
+  state.step = 0;
+  renderQuestion();
+  // data-track: quiz-start (fires on button click above)
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.step];
+  const progress = ((state.step) / 4) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-bar-wrap').setAttribute('aria-valuenow', state.step);
+
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = `
+    <div class="quiz-step">
+      <div class="step-label">${q.label}</div>
+      <h2 class="step-question">${q.question}</h2>
+      <div class="options-grid" role="group" aria-label="${q.question}">
+        ${q.options.map(o => `
+          <button
+            class="option-btn"
+            data-value="${o.value}"
+            onclick="selectOption('${q.key}','${o.value}',this)"
+            aria-pressed="false"
+            aria-label="${o.label}"
+          >
+            <span class="opt-icon" aria-hidden="true">${o.icon}</span>
+            <span class="opt-label">${o.label}</span>
+          </button>
+        `).join('')}
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextStep()" aria-label="Next question">
+        ${state.step < 3 ? 'Next →' : 'Build my checklist ✦'}
+      </button>
+    </div>
+  `;
+}
+
+function selectOption(key, value, el) {
+  state.answers[key] = value;
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-pressed', 'true');
+  el.classList.add('pop');
+  setTimeout(() => el.classList.remove('pop'), 250);
+  document.getElementById('btn-next').classList.add('ready');
+}
+
+function nextStep() {
+  if (!document.getElementById('btn-next').classList.contains('ready')) return;
+  if (state.step < 3) {
+    state.step++;
+    renderQuestion();
+  } else {
+    // data-track: quiz-complete
+    buildChecklist();
+  }
+}
+
+/* ── CHECKLIST BUILDER ── */
+const CHECKLIST_DATA = {
+  Clothes: {
+    base: ['Underwear', 'Socks', 'Casual T-shirts'],
+    business: ['Formal shirts', 'Trousers / dress pants', 'Business shoes', 'Belt'],
+    vacation: ['Swimwear', 'Light shorts', 'Evening outfit'],
+    weekend: ['2 outfits', 'Comfortable shoes'],
+    roadtrip: ['Comfortable clothes', 'Hoodie or light jacket'],
+    hot: ['Sunhat', 'Light breathable tops'],
+    cold: ['Warm jacket', 'Thermals', 'Woolen socks', 'Scarf & gloves'],
+    mixed: ['Light jacket', 'Layer-friendly tops'],
+    rainy: ['Raincoat or umbrella', 'Waterproof shoes'],
+    long: ['Extra outfits (4+)', 'Sleep wear', 'Laundry bag'],
+    medium: ['3–4 outfits'],
+  },
+  Toiletries: {
+    base: ['Toothbrush & toothpaste', 'Face wash', 'Deodorant', 'Basic skincare'],
+    hot: ['Sunscreen SPF 50+', 'Lip balm with SPF', 'After-sun lotion'],
+    cold: ['Heavy moisturiser', 'Chapped lip balm'],
+    long: ['Travel-size shampoo', 'Conditioner', 'Razor', 'Full toiletry kit'],
+    compact: ['Mini soap', 'Solid shampoo bar'],
+    vacation: ['Makeup / grooming kit'],
+  },
+  Documents: {
+    base: ['Government photo ID', 'Cash in local currency', 'Emergency contact note'],
+    business: ['Business cards', 'Company ID', 'Work documents'],
+    vacation: ['Passport', 'Travel insurance copy', 'Hotel booking printout'],
+    long: ['Visa documents', 'Spare passport photos'],
+    roadtrip: ['Driving licence', 'Vehicle documents', 'Insurance card'],
+  },
+  Tech: {
+    base: ['Phone charger', 'Power bank', 'Earphones'],
+    business: ['Laptop & charger', 'Mouse', 'Presentation clicker'],
+    long: ['Universal adapter', 'Multi-port USB hub'],
+    roadtrip: ['Car charger', 'Aux cable or Bluetooth adapter', 'Phone mount'],
+    vacation: ['Camera or action cam', 'Memory cards'],
+    compact: [],
+  },
+  Essentials: {
+    base: ['Medications', 'Reusable water bottle', 'Small first-aid kit'],
+    hot: ['Sunglasses', 'Portable fan or cooling towel'],
+    cold: ['Hand warmers'],
+    rainy: ['Extra umbrella', 'Dry bags for electronics'],
+    roadtrip: ['Car tissues', 'Wet wipes', 'Snacks for the road'],
+    long: ['Travel pillow', 'Sleep mask & earplugs'],
+    compact: ['Packing cubes', 'Compression bags'],
+    organised: ['Packing cubes', 'Cable organiser', 'Label tags'],
+    gifting: ['Small gift wrap bags', 'Travel-size goodies'],
+    access: ['Waist bag or sling bag', 'Key lanyard'],
+  }
+};
+
+function buildChecklist() {
+  const a = state.answers;
+  state.checklistItems = [];
+
+  const cats = ['Clothes', 'Toiletries', 'Documents', 'Tech', 'Essentials'];
+  const tagMap = {
+    type:     a.type,
+    duration: a.duration === 'long' ? 'long' : a.duration === 'medium' ? 'medium' : null,
+    weather:  a.weather,
+    need:     a.need,
+  };
+
+  cats.forEach(cat => {
+    const catData = CHECKLIST_DATA[cat];
+    let items = [...(catData.base || [])];
+
+    // Type
+    if (a.type && catData[a.type]) items = items.concat(catData[a.type]);
+    // Duration
+    if (tagMap.duration && catData[tagMap.duration]) items = items.concat(catData[tagMap.duration]);
+    // Weather
+    if (a.weather && catData[a.weather]) items = items.concat(catData[a.weather]);
+    // Need
+    if (a.need && catData[a.need]) items = items.concat(catData[a.need]);
+
+    // Deduplicate
+    const seen = new Set();
+    items = items.filter(i => { const k = i.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+
+    if (items.length > 0) {
+      state.checklistItems.push({ category: cat, items: items.map(label => ({ label, checked: false, custom: false })) });
+    }
+  });
+
+  // Render trip summary
+  const summaryEl = document.getElementById('trip-summary');
+  const labels = {
+    type:     { weekend:'Weekend', business:'Business', vacation:'Vacation', roadtrip:'Road trip' },
+    duration: { short:'1–3 days', medium:'4–7 days', long:'8+ days' },
+    weather:  { hot:'Hot ☀️', mixed:'Mixed ⛅', cold:'Cold ❄️', rainy:'Rainy 🌧️' },
+    need:     { organised:'Organised 📦', access:'Easy access 🎒', compact:'Compact 🧳', gifting:'Gifting 🎁' },
+  };
+  summaryEl.innerHTML = Object.entries(a).map(([k,v]) => `<span class="trip-pill">${labels[k][v]}</span>`).join('');
+
+  renderChecklist();
+
+  document.getElementById('quiz-section').classList.add('hidden');
+  document.getElementById('results-section').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderChecklist() {
+  const container = document.getElementById('checklist-container');
+  container.innerHTML = state.checklistItems.map(cat => `
+    <div class="checklist-category">
+      <div class="cat-heading">${cat.category}</div>
+      ${cat.items.map((item, i) => `
+        <div
+          class="checklist-item${item.checked ? ' checked' : ''}"
+          onclick="toggleItem('${cat.category}',${i})"
+          data-track="checklist-item-toggle"
+          role="checkbox"
+          aria-checked="${item.checked}"
+          tabindex="0"
+          onkeydown="if(event.key===' '||event.key==='Enter'){toggleItem('${cat.category}',${i})}"
+        >
+          <div class="item-check" aria-hidden="true">
+            <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+              <path d="M1 4l3.5 3.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="item-label">${item.label}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function toggleItem(category, index) {
+  const cat = state.checklistItems.find(c => c.category === category);
+  if (cat) {
+    cat.items[index].checked = !cat.items[index].checked;
+    renderChecklist();
+  }
+}
+
+function addCustomItem() {
+  const input = document.getElementById('custom-item-input');
+  const val = input.value.trim();
+  if (!val) return;
+  let essentials = state.checklistItems.find(c => c.category === 'Essentials');
+  if (!essentials) {
+    state.checklistItems.push({ category: 'Essentials', items: [] });
+    essentials = state.checklistItems[state.checklistItems.length - 1];
+  }
+  essentials.items.push({ label: val, checked: false, custom: true });
+  input.value = '';
+  renderChecklist();
+}
+
+function resetChecklist() {
+  state.checklistItems.forEach(cat => cat.items.forEach(i => i.checked = false));
+  renderChecklist();
+}
+
+/* ── PRODUCTS ── */
+const OWN_PRODUCTS = [
+  {
+    id: 'organiser',
+    name: 'Travooz Travel Organiser',
+    emoji: '🗃️',
+    desc: 'Keep every compartment in order. Designed for travellers who hate digging through bags.',
+    show: (a) => a.need === 'organised' || a.duration === 'long' || a.type === 'vacation' || a.duration === 'medium',
+  },
+  {
+    id: 'waist_bag',
+    name: 'Travooz Waist Bag',
+    emoji: '👜',
+    desc: 'Keep your essentials hands-free. Perfect for city walks, markets, and transit days.',
+    show: (a) => a.need === 'access' || a.type === 'roadtrip' || a.type === 'vacation' || a.type === 'weekend',
+  },
+  {
+    id: 'tyre_valve',
+    name: 'Glow-in-Dark Tyre Valves',
+    emoji: '✨',
+    desc: 'Ride in style, day or night. A small upgrade that turns heads on every road trip.',
+    show: (a) => a.type === 'roadtrip',
+  },
+  {
+    id: 'keychain',
+    name: 'Travooz Keychain',
+    emoji: '🔑',
+    desc: 'The traveller\'s little keepsake. Makes a great gift or a budget add-on for yourself.',
+    show: (a) => a.need === 'gifting' || true, // always show as budget add-on
+  },
+];
+
+const AFFILIATE_PRODUCTS = [
+  {
+    id: 'power_bank',
+    emoji: '🔋',
+    name: 'Slim Power Bank',
+    sub: 'Never run out of charge mid-trip.',
+    show: () => true,
+  },
+  {
+    id: 'mini_lock',
+    emoji: '🔒',
+    name: 'TSA Mini Lock',
+    sub: 'Lightweight security for every bag.',
+    show: (a) => a.type === 'vacation' || a.duration === 'long',
+  },
+  {
+    id: 'travel_bottle',
+    emoji: '💧',
+    name: 'Leak-Proof Travel Bottle',
+    sub: 'Stay hydrated without the mess.',
+    show: () => true,
+  },
+  {
+    id: 'neck_pillow',
+    emoji: '🛩️',
+    name: 'Memory Foam Neck Pillow',
+    sub: 'Arrive rested. Always.',
+    show: (a) => a.type === 'vacation' || a.duration === 'long' || a.duration === 'medium',
+  },
+  {
+    id: 'passport_holder',
+    emoji: '📘',
+    name: 'RFID Passport Holder',
+    sub: 'Safe, slim, and smart.',
+    show: (a) => a.type === 'vacation' || a.duration === 'long',
+  },
+  {
+    id: 'toiletry_set',
+    emoji: '🧴',
+    name: 'Travel Toiletry Bottle Set',
+    sub: 'Refillable, TSA-approved.',
+    show: (a) => a.duration !== 'short',
+  },
+];
+
+function showProducts() {
+  const a = state.answers;
+
+  // Own products
+  const ownEl = document.getElementById('own-products-container');
+  const ownVisible = OWN_PRODUCTS.filter(p => p.show(a));
+  ownEl.innerHTML = ownVisible.map(p => `
+    <div class="product-card" data-product="${p.id}">
+      <div class="product-img-wrap">
+        <span class="product-emoji" aria-hidden="true">${p.emoji}</span>
+        <span class="own-badge">Travooz Pick</span>
+      </div>
+      <div class="product-body">
+        <h3 class="product-name">${p.name}</h3>
+        <p class="product-desc">${p.desc}</p>
+        <div class="product-cta-row">
+          <a
+            href="${waLink(CONFIG.PRODUCTS[p.id])}"
+            class="btn-wa"
+            target="_blank"
+            rel="noopener"
+            data-track="whatsapp-click"
+            data-product="${p.id}"
+            aria-label="Order ${p.name} on WhatsApp"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.105.55 4.082 1.516 5.794L.059 23.938l6.292-1.639A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.359-.215-3.734.973.998-3.645-.234-.374A9.818 9.818 0 1112 21.818z"/></svg>
+            WhatsApp
+          </a>
+          <a
+            href="${CONFIG.INSTAGRAM_URL}"
+            class="btn-ig"
+            target="_blank"
+            rel="noopener"
+            data-track="instagram-click"
+            data-product="${p.id}"
+            aria-label="Order ${p.name} on Instagram"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Affiliate products
+  const affEl = document.getElementById('affiliate-products-container');
+  const affVisible = AFFILIATE_PRODUCTS.filter(p => p.show(a)).slice(0, 4);
+  affEl.innerHTML = affVisible.map(p => `
+    <div class="affiliate-card">
+      <span class="aff-emoji" aria-hidden="true">${p.emoji}</span>
+      <span class="aff-name">${p.name}</span>
+      <span class="aff-sub">${p.sub}</span>
+      <a
+        href="${CONFIG.AFFILIATE_LINKS[p.id]}"
+        class="btn-aff"
+        target="_blank"
+        rel="noopener nofollow"
+        data-track="affiliate-click"
+        data-product="${p.id}"
+        aria-label="Check ${p.name} on Amazon"
+      >
+        Check it out →
+      </a>
+    </div>
+  `).join('');
+
+  // Update sticky bar WA link with general contact message
+  document.getElementById('sticky-wa-btn').href = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! I want to know more about TRAVOOZ travel gear 🎒")}`;
+
+  document.getElementById('products-section').classList.remove('hidden');
+  document.getElementById('results-section').classList.add('hidden');
+  document.getElementById('quiz-section').classList.add('hidden');
+
+  setTimeout(() => {
+    document.getElementById('products-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showStickyBar();
+  }, 100);
+}
+
+function showStickyBar() {
+  document.getElementById('sticky-bar').classList.add('visible');
+}
+
+/* ── BLOG ── */
+const BLOG_POSTS = [
+  {
+    tag: 'Packing guide',
+    title: 'What to Pack for a 3-Day Trip',
+    excerpt: 'Short trips are where most people over-pack. Here\'s a clean, tested list that fits in a carry-on — no matter where you\'re headed.',
+    content: `
+      <p>The 3-day rule is simple: <strong>pack for 3 days, not for 3 possibilities</strong>. Most people over-pack because they plan for every scenario. Instead, plan for the most likely one.</p>
+      <br>
+      <p><strong>Clothes:</strong> 2 outfits + 1 backup top. Mix colours that can be worn multiple ways. A neutral bottom (jeans or trousers) goes with almost anything.</p>
+      <br>
+      <p><strong>Toiletries:</strong> Buy mini sizes or use solid alternatives (shampoo bars, solid sunscreen). These save both weight and liquid limits.</p>
+      <br>
+      <p><strong>Tech:</strong> Phone charger + power bank = the only non-negotiables. Leave the laptop unless it's a business trip.</p>
+      <br>
+      <p><strong>Pro tip:</strong> Use a packing organiser (like the Travooz Travel Organiser) to keep everything in one removable unit. Unpacking at the hotel takes 30 seconds.</p>
+    `,
+  },
+  {
+    tag: 'Don\'t forget',
+    title: 'Travel Essentials Most People Forget',
+    excerpt: 'It\'s never the big things. It\'s the small ones — the charger you left on the bedside table, the mini lock you skipped.',
+    content: `
+      <p>We asked real travellers what they most frequently forget. Here's the honest list:</p>
+      <br>
+      <ul style="padding-left:20px; line-height:2.2;">
+        <li>Phone/laptop charger (left plugged in at home)</li>
+        <li>Power bank (charged and packed separately)</li>
+        <li>Medications — especially prescription ones</li>
+        <li>A physical backup of key document numbers</li>
+        <li>Earplugs and sleep mask for overnight travel</li>
+        <li>Reusable water bottle (hydration = less fatigue)</li>
+        <li>A small TSA lock for hostel lockers or checked bags</li>
+      </ul>
+      <br>
+      <p>The fix? A <strong>pre-trip checklist</strong> you run through the night before — not the morning of. Use the TRAVOOZ Pack Smart checklist above and tick everything off a day early.</p>
+    `,
+  },
+  {
+    tag: 'Organisation',
+    title: 'How to Stay Organised While Travelling',
+    excerpt: 'The secret isn\'t packing less. It\'s knowing exactly where everything is, every time you open your bag.',
+    content: `
+      <p>The biggest cause of travel chaos isn't over-packing — it's <strong>random packing</strong>. Throwing things in without a system means everything comes out when you need one thing.</p>
+      <br>
+      <p><strong>The zone method:</strong> Assign zones inside your bag — one for clothes, one for toiletries, one for tech, one for documents. Use packing cubes or organisers to hold each zone.</p>
+      <br>
+      <p><strong>The outer pocket rule:</strong> Anything you need in the first 10 minutes of landing (passport, boarding pass, charger, meds) goes in the outer pocket.</p>
+      <br>
+      <p><strong>The one-pouch principle:</strong> Keep all cables and tech accessories in a single, dedicated pouch. Never search for a cable again.</p>
+      <br>
+      <p>The Travooz Travel Organiser is designed around this system — multiple labelled compartments, expandable capacity, and a clean top-loading design.</p>
+    `,
+  },
+  {
+    tag: 'Road trip',
+    title: 'Best Accessories for a Road Trip',
+    excerpt: 'Road trips have their own packing logic. Here\'s what separates a smooth drive from a miserable one.',
+    content: `
+      <p>Road trips are unique: you have more space than a carry-on, but you're also living out of your car for hours at a stretch. The right accessories make it genuinely enjoyable.</p>
+      <br>
+      <p><strong>For the car:</strong></p>
+      <ul style="padding-left:20px; line-height:2.2;">
+        <li>Car charger with multiple USB ports (everyone needs to charge)</li>
+        <li>Phone mount for GPS (never hold your phone while driving)</li>
+        <li>A small trash bag clipped to the seat — game changer</li>
+        <li>Aux or Bluetooth transmitter for older cars</li>
+      </ul>
+      <br>
+      <p><strong>For yourself:</strong></p>
+      <ul style="padding-left:20px; line-height:2.2;">
+        <li>Sunglasses — polarised if possible, for long sunny drives</li>
+        <li>Wet wipes and tissues (you'll use them constantly)</li>
+        <li>A waist bag for petrol stops — wallet, phone, keys without the whole bag</li>
+        <li>Water bottle in the cup holder, always</li>
+      </ul>
+      <br>
+      <p>Don't forget to style your ride too — the Travooz Glow-in-Dark Tyre Valves are a small detail that riders and car enthusiasts genuinely love.</p>
+    `,
+  },
+];
+
+function renderBlog() {
+  const container = document.getElementById('blog-container');
+  container.innerHTML = BLOG_POSTS.map((post, i) => `
+    <article class="blog-card" onclick="openModal(${i})" data-track="blog-read" data-blog="${i}" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){openModal(${i})}">
+      <div class="blog-tag">${post.tag}</div>
+      <h3 class="blog-title">${post.title}</h3>
+      <p class="blog-excerpt">${post.excerpt}</p>
+      <div class="blog-card-footer">
+        <span class="btn-read" aria-label="Read ${post.title}">Read more →</span>
+      </div>
+    </article>
+  `).join('');
+}
+
+/* ── MODAL ── */
+function openModal(index) {
+  const post = BLOG_POSTS[index];
+  document.getElementById('modal-title').textContent = post.title;
+  document.getElementById('modal-body').innerHTML = post.content;
+  const overlay = document.getElementById('modal-overlay');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+  if (event && event.target !== document.getElementById('modal-overlay') && !event.target.classList.contains('modal-close')) return;
+  const overlay = document.getElementById('modal-overlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({ target: document.getElementById('modal-overlay') }); });
+
+/* ── SCROLL: show sticky bar when blog section is visible ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) showStickyBar(); });
+}, { threshold: 0.1 });
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderShop();
+  renderBlog();
+  observer.observe(document.getElementById('blog-section'));
+});
+
+/* ── Minimal analytics hook ── */
+/* Replace this with your actual analytics (GA4, Plausible, etc.) */
+document.addEventListener('click', e => {
+  const tracked = e.target.closest('[data-track]');
+  if (!tracked) return;
+  const event = tracked.dataset.track;
+  const product = tracked.dataset.product || '';
+  // console.log('[TRAVOOZ track]', event, product);
+  // ga('send', 'event', 'TRAVOOZ', event, product);
+});
+
+</script>
+</body>
+</html>
